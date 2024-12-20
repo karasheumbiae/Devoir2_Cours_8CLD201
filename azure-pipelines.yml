@@ -1,8 +1,3 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
 - main
 
@@ -30,3 +25,46 @@ stages:
         csmParametersFile: '$(Build.SourcesDirectory)/StorageAccountTp2/azuredeploy.parameters.json'
         deploymentMode: 'Incremental'
         deploymentOutputs: 'StorageDeploymentOutputs'
+
+    - task: AzureResourceManagerTemplateDeployment@3
+      displayName: "Deploy Service Bus"
+      inputs:
+        deploymentScope: 'Resource Group'
+        azureResourceManagerConnection: 'MyAzureConnection'
+        subscriptionId: '644f8dda-724f-4ca4-bf35-d8131da4649b'
+        action: 'Create Or Update Resource Group'
+        resourceGroupName: 'heumbia21'
+        location: 'Canada Central'
+        templateLocation: 'Linked artifact'
+        csmFile: '$(Build.SourcesDirectory)/Tp2ServiceBus/azuredeploy.json'
+        csmParametersFile: '$(Build.SourcesDirectory)/Tp2ServiceBus/azuredeploy.parameters.json'
+        deploymentMode: 'Incremental'
+        deploymentOutputs: 'ServiceBusDeploymentOutputs'
+
+    - task: AzureResourceManagerTemplateDeployment@3
+      displayName: "Deploy Fonction App 2"
+      inputs:
+        deploymentScope: 'Resource Group'
+        azureResourceManagerConnection: 'MyAzureConnection'
+        subscriptionId: '644f8dda-724f-4ca4-bf35-d8131da4649b'
+        action: 'Create Or Update Resource Group'
+        resourceGroupName: 'heumbia21'
+        location: 'Canada Central'
+        templateLocation: 'Linked artifact'
+        csmFile: '$(Build.SourcesDirectory)/AzureFonction2/azuredeploy.json'
+        csmParametersFile: '$(Build.SourcesDirectory)/AzureFonction2/azuredeploy.parameters.json'
+        deploymentMode: 'Incremental'
+
+    - task: AzureResourceManagerTemplateDeployment@3
+      displayName: "Deploy Fonction App 3"
+      inputs:
+        deploymentScope: 'Resource Group'
+        azureResourceManagerConnection: 'MyAzureConnection'
+        subscriptionId: '644f8dda-724f-4ca4-bf35-d8131da4649b'
+        action: 'Create Or Update Resource Group'
+        resourceGroupName: 'heumbia21'
+        location: 'Canada Central'
+        templateLocation: 'Linked artifact'
+        csmFile: '$(Build.SourcesDirectory)/AzureFonction3/azuredeploy.json'
+        csmParametersFile: '$(Build.SourcesDirectory)/AzureFonction3/azuredeploy.parameters.json'
+        deploymentMode: 'Incremental'
