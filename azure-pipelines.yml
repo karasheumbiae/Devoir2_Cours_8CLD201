@@ -42,7 +42,7 @@ stages:
         deploymentOutputs: 'ServiceBusDeploymentOutputs'
 
     - task: AzureResourceManagerTemplateDeployment@3
-      displayName: "Deploy Function App 1"
+      displayName: "Deploy Fonction App 2"
       inputs:
         deploymentScope: 'Resource Group'
         azureResourceManagerConnection: 'MyAzureConnection'
@@ -51,12 +51,12 @@ stages:
         resourceGroupName: 'heumbia21'
         location: 'Canada Central'
         templateLocation: 'Linked artifact'
-        csmFile: '$(Build.SourcesDirectory)/AzureFunction2/azuredeploy.json'
-        csmParametersFile: '$(Build.SourcesDirectory)/AzureFunction2/azuredeploy.parameters.json'
+        csmFile: '$(Build.SourcesDirectory)/AzureFonction2/azuredeploy.json'
+        csmParametersFile: '$(Build.SourcesDirectory)/AzureFonction2/azuredeploy.parameters.json'
         deploymentMode: 'Incremental'
 
     - task: AzureResourceManagerTemplateDeployment@3
-      displayName: "Deploy Function App 2"
+      displayName: "Deploy Fonction App 3"
       inputs:
         deploymentScope: 'Resource Group'
         azureResourceManagerConnection: 'MyAzureConnection'
@@ -65,6 +65,6 @@ stages:
         resourceGroupName: 'heumbia21'
         location: 'Canada Central'
         templateLocation: 'Linked artifact'
-        csmFile: '$(Build.SourcesDirectory)/AzureFunction3/azuredeploy.json'
-        csmParametersFile: '$(Build.SourcesDirectory)/AzureFunction3/azuredeploy.parameters.json'
+        csmFile: '$(Build.SourcesDirectory)/AzureFonction3/azuredeploy.json'
+        csmParametersFile: '$(Build.SourcesDirectory)/AzureFonction3/azuredeploy.parameters.json'
         deploymentMode: 'Incremental'
