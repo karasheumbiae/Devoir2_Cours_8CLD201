@@ -3,13 +3,13 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "functionAppName": {
-      "value": "devoir2-function2"
+      "value": "devoir2function2"
     },
     "appServicePlanName": {
-      "value": "devoir2-plan2"
+      "value": "devoir2plan2"
     },
     "appInsightsName": {
-      "value": "devoir2-appinsights2"
+      "value": "tp2appinsights2"
     },
     "location": {
       "value": "canadacentral"
