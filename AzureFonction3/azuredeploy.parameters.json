@@ -1,0 +1,21 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "functionAppName": {
+      "value": "devoir2-function2"
+    },
+    "appServicePlanName": {
+      "value": "devoir2-plan2"
+    },
+    "appInsightsName": {
+      "value": "devoir2-appinsights2"
+    },
+    "location": {
+      "value": "canadacentral"
+    },
+    "storageConnectionString": {
+      "value": "<INSERT_STORAGE_CONNECTION_STRING>"
+    }
+  }
+}
