@@ -10,7 +10,7 @@ pool:
   vmImage: 'default'  # Image de l'agent
 
 variables:
-  azureSubscription: '644f8dda-724f-4ca4-bf35-d8131da4649b'  # Nom du Service Connection dans Azure DevOps
+  azureSubscription: '0299a3a0-0f11-4c6e-bc66-0840b9ecef30'  # Nom du Service Connection dans Azure DevOps
   resourceGroupName: 'heumbia21'  # Nom du groupe de ressources Azure
   functionAppBlobTrigger: '<myfunctionapp21>'  # Nom de l'Azure Function App pour BlobTriggerFunction
   functionAppBusFunction: '<myfunctionapp21>'  # Nom de l'Azure Function App pour BusFunction
