@@ -1,0 +1,32 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  name: "default"
+
+stages:
+- stage: DeployInfra
+  displayName: "Deploy Infrastructure"
+  jobs:
+  - job: DeployAll
+    displayName: "Deployment StorageAccount, Service Bus, et Functions"
+    steps:
+    - task: AzureResourceManagerTemplateDeployment@3
+      displayName: "Deploy Storage Accounts"
+      inputs:
+        deploymentScope: 'Resource Group'
+        azureResourceManagerConnection: 'MyAzureConnection'
+        subscriptionId: '644f8dda-724f-4ca4-bf35-d8131da4649b'
+        action: 'Create Or Update Resource Group'
+        resourceGroupName: 'heumbia21'
+        location: 'Canada Central'
+        templateLocation: 'Linked artifact'
+        csmFile: '$(Build.SourcesDirectory)/StorageAccountTp2/azuredeploy.json'
+        csmParametersFile: '$(Build.SourcesDirectory)/StorageAccountTp2/azuredeploy.parameters.json'
+        deploymentMode: 'Incremental'
+        deploymentOutputs: 'StorageDeploymentOutputs'
