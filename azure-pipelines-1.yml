@@ -7,8 +7,8 @@ pool:
 variables:
   azureSubscription: '0299a3a0-0f11-4c6e-bc66-0840b9ecef30'  # Service Connection dans Azure DevOps
   resourceGroupName: 'heumbia21'  # Nom du groupe de ressources Azure
-  functionAppBlobTrigger: 'my-blob-function-app'  # Nom réel de l'Azure Function App pour BlobTriggerFunction
-  functionAppBusFunction: 'my-bus-function-app'  # Nom réel de l'Azure Function App pour BusFunction
+  functionAppBlobTrigger: '<myfunctionapp21>'  # Nom de l'Azure Function App pour BlobTriggerFunction
+  functionAppBusFunction: '<myfunctionapp21>'  # Nom de l'Azure Function App pour BusFunction
   system.debug: true  # Activer les logs détaillés
 
 steps:
@@ -16,7 +16,7 @@ steps:
 - task: UseDotNet@2
   inputs:
     packageType: 'sdk'
-    version: '6.x'
+    version: '8.x'
     installationPath: $(Agent.ToolsDirectory)/dotnet
 
 # Étape 2 : Restaurer les packages NuGet pour BlobTriggerFunction
