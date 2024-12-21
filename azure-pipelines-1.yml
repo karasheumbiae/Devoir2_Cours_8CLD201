@@ -1,74 +1,110 @@
 trigger:
-- main  # Déclenchement sur la branche principale
+  - main  # Déclenchement sur la branche principale
 
 pool:
   vmImage: 'windows-latest'  # Image de l'agent
 
 variables:
-  azureSubscription: '0299a3a0-0f11-4c6e-bc66-0840b9ecef30'  # Service Connection dans Azure DevOps
+  azureSubscription: 'MyAzureConnection'  # Nom de la Service Connection dans Azure DevOps
   resourceGroupName: 'heumbia21'  # Nom du groupe de ressources Azure
-  functionAppBlobTrigger: '<myfunctionapp21>'  # Nom de l'Azure Function App pour BlobTriggerFunction
-  functionAppBusFunction: '<myfunctionapp21>'  # Nom de l'Azure Function App pour BusFunction
-  system.debug: true  # Activer les logs détaillés
+  location: 'Canada Central'  # Emplacement des ressources Azure
+  functionAppBlobTrigger: 'myfunctionapp21'  # Nom de l'Azure Function App pour BlobTriggerFunction
+  functionAppBusFunction: 'myfunctionapp21'  # Nom de l'Azure Function App pour BusFunction
 
 steps:
-# Étape 1 : Installer les dépendances .NET
-- task: UseDotNet@2
-  inputs:
-    packageType: 'sdk'
-    version: '8.x'
-    installationPath: $(Agent.ToolsDirectory)/dotnet
+  # Étape 1 : Déployer les ressources Azure avec les fichiers ARM
+  - task: AzureResourceManagerTemplateDeployment@3
+    displayName: 'Deploy Azure resources using ARM templates'
+    inputs:
+      azureResourceManagerConnection: $(azureSubscription)
+      subscriptionId: '644f8dda-724f-4ca4-bf35-d8131da4649b'
+      action: 'Create Or Update Resource Group'
+      resourceGroupName: $(resourceGroupName)
+      location: $(location)
+      templateLocation: 'Linked artifact'
+      csmFile: '$(Build.SourcesDirectory)/AzureFonction3/azuredeploy.json'  # Chemin vers votre fichier ARM
+      csmParametersFile: '$(Build.SourcesDirectory)/AzureFonction3/azuredeploy.parameters.json'  # Chemin vers vos paramètres ARM
 
-# Étape 2 : Construire le projet BlobTriggerFunction
-- task: DotNetCoreCLI@2
-  displayName: 'Build BlobTriggerFunction'
-  inputs:
-    command: 'build'
-    projects: 'BlobTriggerFunction/BlobTriggerFunction.csproj'
-    arguments: '--configuration Release'
+  # Étape 2 : Installons les dépendances .NET
+  - task: UseDotNet@2
+    inputs:
+      packageType: 'sdk'
+      version: '8.0.x'  # Assurez-vous de choisir une version compatible avec vos projets
+      installationPath: $(Agent.ToolsDirectory)/dotnet
 
-# Étape 4 : Publier les artefacts de BlobTriggerFunction
-- task: DotNetCoreCLI@2
-  displayName: 'Publish BlobTriggerFunction'
-  inputs:
-    command: 'publish'
-    publishWebProjects: false
-    projects: 'BlobTriggerFunction/BlobTriggerFunction.csproj'
-    arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)/BlobTriggerFunction'
-    modifyOutputPath: true
+  # Étape 3 : Restaurons les packages NuGet pour BlobTriggerFunction
+  - task: NuGetCommand@2
+    displayName: 'Restore NuGet packages for BlobTriggerFunction'
+    inputs:
+      restoreSolution: 'BlobTriggerFunction/BlobTriggerFunction.csproj'
 
-# Étape 6 : Construire le projet BusFunction
-- task: DotNetCoreCLI@2
-  displayName: 'Build BusFunction'
-  inputs:
-    command: 'build'
-    projects: 'BusFunction/BusFunction.csproj'
-    arguments: '--configuration Release'
+  # Étape 4 : Construisons le projet BlobTriggerFunction
+  - task: DotNetCoreCLI@2
+    displayName: 'Build BlobTriggerFunction'
+    inputs:
+      command: 'build'
+      projects: 'BlobTriggerFunction/BlobTriggerFunction.csproj'
+      arguments: '--configuration Release'
 
-# Étape 7 : Publier les artefacts de BusFunction
-- task: DotNetCoreCLI@2
-  displayName: 'Publish BusFunction'
-  inputs:
-    command: 'publish'
-    publishWebProjects: false
-    projects: 'BusFunction/BusFunction.csproj'
-    arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)/BusFunction'
-    modifyOutputPath: true
+  # Étape 5 : Publier les artefacts de BlobTriggerFunction
+  - task: DotNetCoreCLI@2
+    displayName: 'Publish BlobTriggerFunction'
+    inputs:
+      command: 'publish'
+      publishWebProjects: false
+      projects: 'BlobTriggerFunction/BlobTriggerFunction.csproj'
+      arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)/BlobTriggerFunction'
+      modifyOutputPath: true
 
-# Étape 8 : Déployer BlobTriggerFunction sur Azure
-- task: AzureFunctionApp@1
-  displayName: 'Deploy BlobTriggerFunction'
-  inputs:
-    azureSubscription: $(azureSubscription)
-    appType: 'functionApp'
-    appName: $(functionAppBlobTrigger)
-    package: '$(Build.ArtifactStagingDirectory)/BlobTriggerFunction'
+  # Étape 6 : Restaurer les packages NuGet pour BusFunction
+  - task: NuGetCommand@2
+    displayName: 'Restore NuGet packages for BusFunction'
+    inputs:
+      restoreSolution: 'BusFunction/BusFunction.csproj'
 
-# Étape 9 : Déployer BusFunction sur Azure
-- task: AzureFunctionApp@1
-  displayName: 'Deploy BusFunction'
-  inputs:
-    azureSubscription: $(azureSubscription)
-    appType: 'functionApp'
-    appName: $(functionAppBusFunction)
-    package: '$(Build.ArtifactStagingDirectory)/BusFunction'
+  # Étape 7 : Construire le projet BusFunction
+  - task: DotNetCoreCLI@2
+    displayName: 'Build BusFunction'
+    inputs:
+      command: 'build'
+      projects: 'BusFunction/BusFunction.csproj'
+      arguments: '--configuration Release'
+
+  # Étape 8 : Publier les artefacts de BusFunction
+  - task: DotNetCoreCLI@2
+    displayName: 'Publish BusFunction'
+    inputs:
+      command: 'publish'
+      publishWebProjects: false
+      projects: 'BusFunction/BusFunction.csproj'
+      arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)/BusFunction'
+      modifyOutputPath: true
+
+  # Étape 9 : Déployer BlobTriggerFunction sur Azure
+  - task: AzureFunctionApp@1
+    displayName: 'Deploy BlobTriggerFunction'
+    inputs:
+      azureSubscription: $(azureSubscription)
+      appType: 'functionApp'
+      appName: $(functionAppBlobTrigger)
+      package: '$(Build.ArtifactStagingDirectory)/BlobTriggerFunction'
+
+  # Étape 10 : Déployer BusFunction sur Azure
+  - task: AzureFunctionApp@1
+    displayName: 'Deploy BusFunction'
+    inputs:
+      azureSubscription: $(azureSubscription)
+      appType: 'functionApp'
+      appName: $(functionAppBusFunction)
+      package: '$(Build.ArtifactStagingDirectory)/BusFunction'
+
+  # Étape 11 : Valider le déploiement des Function Apps
+  - task: AzureCLI@2
+    displayName: 'Validate Function Apps deployment'
+    inputs:
+      azureSubscription: $(azureSubscription)
+      scriptType: 'bash'
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        az functionapp show --name $(functionAppBlobTrigger) --resource-group $(resourceGroupName)
+        az functionapp show --name $(functionAppBusFunction) --resource-group $(resourceGroupName)
