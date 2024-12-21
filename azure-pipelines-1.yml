@@ -7,7 +7,7 @@ pool:
 variables:
   azureSubscription: 'MyAzureConnection'  # Nom de la Service Connection dans Azure DevOps
   resourceGroupName: 'heumbia21'  # Nom du groupe de ressources Azure
-  location: 'canada central'  # Emplacement des ressources Azure
+  location: 'Canada Central'  # Emplacement des ressources Azure
   functionAppBlobTrigger: 'BlobTriggerFunction'  # Nom de l'Azure Function App pour BlobTriggerFunction
   functionAppBusFunction: 'BusFunction'  # Nom de l'Azure Function App pour BusFunction
 
