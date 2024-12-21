@@ -1,21 +1,15 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
 - main  # Déclenchement sur la branche principale
 
 pool:
-  vmImage: 'default'  # Image de l'agent
+  vmImage: 'windows-latest'  # Image de l'agent
 
 variables:
-  azureSubscription: '0299a3a0-0f11-4c6e-bc66-0840b9ecef30'  # Nom du Service Connection dans Azure DevOps
+  azureSubscription: '0299a3a0-0f11-4c6e-bc66-0840b9ecef30'  # Service Connection dans Azure DevOps
   resourceGroupName: 'heumbia21'  # Nom du groupe de ressources Azure
-  functionAppBlobTrigger: '<myfunctionapp21>'  # Nom de l'Azure Function App pour BlobTriggerFunction
-  functionAppBusFunction: '<myfunctionapp21>'  # Nom de l'Azure Function App pour BusFunction
-  system.debug: true
-
+  functionAppBlobTrigger: 'my-blob-function-app'  # Nom réel de l'Azure Function App pour BlobTriggerFunction
+  functionAppBusFunction: 'my-bus-function-app'  # Nom réel de l'Azure Function App pour BusFunction
+  system.debug: true  # Activer les logs détaillés
 
 steps:
 # Étape 1 : Installer les dépendances .NET
