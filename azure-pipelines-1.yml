@@ -43,7 +43,7 @@ steps:
     displayName: 'Build BlobTriggerFunction'
     inputs:
       command: 'build'
-      projects: 'BlobTriggerFunction/BlobTriggerFunction.csproj'
+      projects: 'AzureFonction3/BlobTriggerFunction/BlobTriggerFunction.csproj'
       arguments: '--configuration Release'
 
   # Étape 5 : Publier les artefacts de BlobTriggerFunction
@@ -52,8 +52,8 @@ steps:
     inputs:
       command: 'publish'
       publishWebProjects: false
-      projects: 'BlobTriggerFunction/BlobTriggerFunction.csproj'
-      arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)/BlobTriggerFunction'
+      projects: 'AzureFonction3/BlobTriggerFunction/BlobTriggerFunction.csproj'
+      arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)AzureFonction3/BlobTriggerFunction'
       modifyOutputPath: true
 
   # Étape 6 : Restaurer les packages NuGet pour BusFunction
@@ -87,7 +87,7 @@ steps:
       azureSubscription: $(azureSubscription)
       appType: 'functionApp'
       appName: $(functionAppBlobTrigger)
-      package: '$(Build.ArtifactStagingDirectory)/BlobTriggerFunction'
+      package: '$(Build.ArtifactStagingDirectory)AzureFonction3/BlobTriggerFunction'
 
   # Étape 10 : Déployer BusFunction sur Azure
   - task: AzureFunctionApp@1
