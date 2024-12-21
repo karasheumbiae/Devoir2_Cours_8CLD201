@@ -16,7 +16,7 @@ steps:
 - task: UseDotNet@2
   inputs:
     packageType: 'sdk'
-    version: '6.2'  # Assurez-vous de choisir une version compatible avec vos projets
+    version: '6.x'
     installationPath: $(Agent.ToolsDirectory)/dotnet
 
 # Étape 2 : Restaurer les packages NuGet pour BlobTriggerFunction
