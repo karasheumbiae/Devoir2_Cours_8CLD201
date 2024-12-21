@@ -18,12 +18,9 @@ steps:
     inputs:
       azureResourceManagerConnection: $(azureSubscription)
       subscriptionId: '<644f8dda-724f-4ca4-bf35-d8131da4649b>'
-      action: 'Create Or Update Resource Group'
-      resourceGroupName: $(resourceGroupName)
-      location: $(location)
       templateLocation: 'Linked artifact'
-      csmFile: '$(Build.SourcesDirectory)/AzureFonction3/azuredeploy.json'  # Chemin vers fichier ARM
-      csmParametersFile: '$(Build.SourcesDirectory)/AzureFonction3/azuredeploy.parameters.json'  # Chemin vers vos paramètres ARM
+      csmFile: '$(Build.SourcesDirectory)/AzureFonction3/azuredeploy.json'
+      csmParametersFile: '$(Build.SourcesDirectory)/AzureFonction3/azuredeploy.parameters.json'
 
   # Étape 2 : Installons les dépendances .NET
   - task: UseDotNet@2
