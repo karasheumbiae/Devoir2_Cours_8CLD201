@@ -53,7 +53,7 @@ steps:
       command: 'publish'
       publishWebProjects: false
       projects: 'AzureFonction3/BlobTriggerFunction/BlobTriggerFunction.csproj'
-      arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)AzureFonction3/BlobTriggerFunction'
+      arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)/BlobTriggerFunction'
       modifyOutputPath: true
 
   # Étape 6 : Restaurer les packages NuGet pour BusFunction
